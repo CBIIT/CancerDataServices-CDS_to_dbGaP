@@ -120,9 +120,9 @@ SubCon=mutate(df,SUBJECT_ID=participant_id,SEX=gender,CONSENT="1")%>%
   select(SUBJECT_ID,CONSENT,SEX)
 
 #Convert sex from a string to a value
+SubCon$SEX[!grepl(pattern = "ale",x = SubCon$SEX)]<-"UNK"
 SubCon$SEX[grep(pattern = "Female",x = SubCon$SEX)]<-"2"
 SubCon$SEX[grep(pattern = "Male",x = SubCon$SEX)]<-"1"
-SubCon$SEX[grep(pattern = "Unknown",x = SubCon$SEX)]<-"UNK"
 
 SSM = mutate(df, SUBJECT_ID=participant_id, SAMPLE_ID=sample_id)%>%
   select(SUBJECT_ID, SAMPLE_ID)
