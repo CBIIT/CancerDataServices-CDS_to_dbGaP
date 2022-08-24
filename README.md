@@ -3,7 +3,7 @@ This script will take a validated CDS submission template and create the submiss
 
 This R Script takes a validated submission template for CDS v1.3.1 as input. It will output a set of files, SubjectConsent data set (DS) and data dictionary (dd) and SubjectSampleMapping (SSM) files.
 
-To run the script on a CDS v1.3.1 template, run the following command in a terminal where R is installed for help.
+To run the script on a complete CDS v1.3.1 validated template, run the following command in a terminal where R is installed for help.
 
 ```
 Rscript --vanilla CDS_to_dbGaP.R --help
@@ -25,5 +25,5 @@ Options:
 A test file has been given for this script:
 
 ```
-Rscript --vanilla CDS_to_dbGaP.R -f test_files/a_all_pass-v1.3.1.xlsx
+Rscript --vanilla CDS_to_dbGaP.R -f test_files/a_all_pass_validation-v1.3.1.xlsx
 ```
