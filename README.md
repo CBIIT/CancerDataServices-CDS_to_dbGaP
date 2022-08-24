@@ -6,7 +6,7 @@ This R Script takes a validated submission template for CDS v1.3.1 as input. It 
 To run the script on a CDS v1.3.1 template, run the following command in a terminal where R is installed for help.
 
 ```
-Rscript --vanilla CDS-Submission_ValidationR.R --help
+Rscript --vanilla CDS_to_dbGaP.R --help
 ```
 
 ```
@@ -25,5 +25,5 @@ Options:
 A test file has been given for this script:
 
 ```
-Rscript --vanilla CDS-Submission_ValidationR.R -f test_files/a_all_pass-v1.3.1.xlsx
+Rscript --vanilla CDS_to_dbGaP.R -f test_files/a_all_pass-v1.3.1.xlsx
 ```
