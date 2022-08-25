@@ -2,7 +2,7 @@
 
 #Cancer Data Services - CDS to dbGaP
 
-#This script will take data from a CDS submission manifest, and create the Subject Consent and Subject Sample Mapping files specifically for a CDS project.
+#This script will take data from a CDS submission manifest, and create the Subject Consent, Subject Sample Mapping and Sample Attribute files specifically for a CDS project.
 
 ##################
 #
@@ -12,7 +12,7 @@
 
 #Run the following command in a terminal where R is installed for help.
 
-#Rscript --vanilla CDS-CDS_to_dbGaP.R --help
+#Rscript --vanilla CDS_to_dbGaP.R --help
 
 
 ##################
@@ -127,16 +127,22 @@ SubCon$SEX[grep(pattern = "Male",x = SubCon$SEX)]<-"1"
 SSM = mutate(df, SUBJECT_ID=participant_id, SAMPLE_ID=sample_id)%>%
   select(SUBJECT_ID, SAMPLE_ID)
 
-#Determine unique values only.
+SA = mutate(df, SAMPLE_ID=sample_id, SAMPLE_TYPE=sample_type)%>%select(SAMPLE_ID,SAMPLE_TYPE)
+
+#Ensure the rows are unique
 SubCon=unique(SubCon)
-SSM=unique(SSM)  
-                 
+SSM=unique(SSM)
+SA=unique(SA)
 
 # The two DD data frames that are needed with the data sets data frames.
 df_sc_dd=data.frame(X1=c("VARNAME","SUBJECT_ID","CONSENT","SEX"),X2=c("VARDESC","Subject ID","Consent group as determined by DAC","Biological sex"),X3=c("TYPE","string","encoded value","encoded value"),X4=c("VALUES",NA,"1=General Research Use (GRU)","1=Male"),X5=c(NA,NA,NA,"2=Female"),X6=c(NA,NA,NA,"UNK=Unknown"))
 
 df_ssm_dd=data.frame(X1=c("VARNAME","SUBJECT_ID","SAMPLE_ID"),X2=c("VARDESC","Subject ID","Sample ID"),X3=c("TYPE","string","string"),X4=c("VALUES",NA,NA))
 
+df_sa_dd=data.frame(X1=c("VARNAME","SAMPLE_ID","SAMPLE_TYPE"),X2=c("VARDESC","Sample ID","Sample Type"),X3=c("TYPE","string","string"),X4=c("VALUES",NA,NA))
+
+
+#insert sample_id and sample_type
 
 ################
 #
@@ -144,12 +150,15 @@ df_ssm_dd=data.frame(X1=c("VARNAME","SUBJECT_ID","SAMPLE_ID"),X2=c("VARDESC","Su
 #
 ################
 
-#Write out the two DD and two DS data frames
-write.xlsx(x = as.data.frame(df_sc_dd),file = paste(path,"2b_SubjectConsent_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
+#Write out the three DD and three DS data frames
+write.xlsx(x = as.data.frame(df_sc_dd),file = paste(path,"SC_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
 
-write.xlsx(x = as.data.frame(df_ssm_dd),file = paste(path,"3b_SSM_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
+write.xlsx(x = as.data.frame(df_ssm_dd),file = paste(path,"SSM_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
 
-write_tsv(x = SubCon,file = paste(path,"2a_SubjectConsent_DS_",output_file,".txt",sep = ""),na="")
+write.xlsx(x = as.data.frame(df_sa_dd),file = paste(path,"SA_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
 
-write_tsv(x = SSM,file = paste(path,"3a_SSM_DS_",output_file,".txt",sep = ""),na="")
+write_tsv(x = SubCon,file = paste(path,"SC_DS_",output_file,".txt",sep = ""),na="")
 
+write_tsv(x = SSM,file = paste(path,"SSM_DS_",output_file,".txt",sep = ""),na="")
+
+write_tsv(x = SA,file = paste(path,"SA_DS_",output_file,".txt",sep = ""),na="")
