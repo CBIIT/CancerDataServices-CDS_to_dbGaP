@@ -133,6 +133,12 @@ SA = mutate(df, SAMPLE_ID=sample_id, SAMPLE_TYPE=sample_type)%>%select(SAMPLE_ID
 SubCon=unique(SubCon)
 SSM=unique(SSM)
 SA=unique(SA)
+                 
+#Ensure that there are no NA's in id columns
+SubCon=SubCon[!is.na(SubCon$SUBJECT_ID),]
+SSM=SSM[!is.na(SSM$SUBJECT_ID),]
+SSM=SSM[!is.na(SSM$SAMPLE_ID),]
+SA=SA[!is.na(SA$SAMPLE_ID),]                 
 
 # The two DD data frames that are needed with the data sets data frames.
 df_sc_dd=data.frame(X1=c("VARNAME","SUBJECT_ID","CONSENT","SEX"),X2=c("VARDESC","Subject ID","Consent group as determined by DAC","Biological sex"),X3=c("TYPE","string","encoded value","encoded value"),X4=c("VALUES",NA,"1=General Research Use (GRU)","1=Male"),X5=c(NA,NA,NA,"2=Female"),X6=c(NA,NA,NA,"UNK=Unknown"))
