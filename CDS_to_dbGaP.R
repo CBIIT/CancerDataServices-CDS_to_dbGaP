@@ -22,7 +22,7 @@
 ##################
 
 #List of needed packages
-list_of_packages=c("dplyr","readr","stringi","readxl","xlsx","optparse","tools")
+list_of_packages=c("dplyr","readr","stringi","readxl","xlsx","optparse","jsonlite","tools")
 
 #Based on the packages that are present, install ones that are required.
 new.packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
@@ -34,6 +34,7 @@ suppressMessages(library(readr,verbose = F))
 suppressMessages(library(xlsx,verbose = F))
 suppressMessages(library(readxl,verbose = F))
 suppressMessages(library(optparse,verbose = F))
+suppressMessages(library(jsonlite,verbose = F))
 suppressMessages(library(tools,verbose = F))
 suppressMessages(library(stringi,verbose = F))
 
@@ -81,15 +82,15 @@ cat("The dbGaP submission files are being made at this time.\n\n\n THIS SCRIPT I
 
 
 #Rework the file path to obtain a file name, this will be used for the output file.
-file_name=stri_reverse(stri_split_fixed(str = (stri_split_fixed(str = stri_reverse(file_path), pattern="/",n = 2)[[1]][1]),pattern = ".", n=2)[[1]][2])
+file_name=stri_split_fixed(basename(file_path),pattern = ".", n=2)[[1]][1]
 
-ext=tolower(stri_reverse(stri_split_fixed(str = stri_reverse(file_path),pattern = ".",n=2)[[1]][1]))
+ext=tolower(stri_reverse(stri_split_fixed(stri_reverse(basename(file_path)),pattern = ".", n=2)[[1]][1]))
 
-path=paste(stri_reverse(stri_split_fixed(str = stri_reverse(file_path), pattern="/",n = 2)[[1]][2]),"/",sep = "")
+path=paste(dirname(file_path),"/",sep = "")
 
 #Output file name based on input file name and date/time stamped.
 output_file=paste(file_name,
-                  "_dbGaP_submission_",
+                  "_dbGaP_",
                   stri_replace_all_fixed(
                     str = Sys.Date(),
                     pattern = "-",
@@ -148,13 +149,29 @@ df_ssm_dd=data.frame(X1=c("VARNAME","SUBJECT_ID","SAMPLE_ID"),X2=c("VARDESC","Su
 df_sa_dd=data.frame(X1=c("VARNAME","SAMPLE_ID","SAMPLE_TYPE"),X2=c("VARDESC","Sample ID","Sample Type"),X3=c("TYPE","string","string"),X4=c("VALUES",NA,NA))
 
 
-#insert sample_id and sample_type
+#Create Metadata JSON to use with gaptools
+metadata_json=list(NAME=paste(unique(df$acl)[1],stri_replace_all_fixed(str = Sys.Date(), pattern = "-",replacement = "_"),sep = ""))
+metadata_json$FILES=append(x = metadata_json$FILES, list(list(name=paste("SC_DS_",output_file,".txt",sep = ""),type="subject_consent_file")))
+metadata_json$FILES=append(x = metadata_json$FILES, list(list(name="SC_DD.xlsx",type="subject_consent_data_dictionary_file")))
+metadata_json$FILES=append(x = metadata_json$FILES, list(list(name=paste("SA_DS_",output_file,".txt",sep = ""),type="sample_attributes")))
+metadata_json$FILES=append(x = metadata_json$FILES, list(list(name="SA_DD.xlsx",type="sample_attributes_dd")))
+metadata_json$FILES=append(x = metadata_json$FILES, list(list(name=paste("SSM_DS_",output_file,".txt",sep = ""),type="subject_sample_mapping_file")))
+metadata_json$FILES=append(x = metadata_json$FILES, list(list(name="SSM_DD.xlsx",type="subject_sample_mapping_data_dictionary_file")))
+
+metadata_json=toJSON(metadata_json,pretty = F,auto_unbox = T)
+
 
 ################
 #
 # Write Out
 #
 ################
+
+#Create an output directory for all the files
+new_dir=paste("dbGaP_submission_",stri_replace_all_fixed(str = Sys.Date(), pattern = "-",replacement = "_"),"/",sep = "")
+dir.create(path = paste(path,new_dir,sep = ""))
+
+path=paste(path,new_dir,sep = "")
 
 #Write out the three DD and three DS data frames
 write.xlsx(x = as.data.frame(df_sc_dd),file = paste(path,"SC_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
@@ -168,3 +185,5 @@ write_tsv(x = SubCon,file = paste(path,"SC_DS_",output_file,".txt",sep = ""),na=
 write_tsv(x = SSM,file = paste(path,"SSM_DS_",output_file,".txt",sep = ""),na="")
 
 write_tsv(x = SA,file = paste(path,"SA_DS_",output_file,".txt",sep = ""),na="")
+
+write(x = metadata_json, file = paste(path,"metadata.json",sep = ""))
