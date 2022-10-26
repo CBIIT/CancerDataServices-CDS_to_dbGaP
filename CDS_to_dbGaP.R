@@ -82,7 +82,7 @@ cat("The dbGaP submission files are being made at this time.\n\n\n THIS SCRIPT I
 
 
 #Rework the file path to obtain a file name, this will be used for the output file.
-file_name=stri_split_fixed(basename(file_path),pattern = ".", n=2)[[1]][1]
+file_name=stri_reverse(stri_split_fixed(stri_reverse(basename(file_path)),pattern = ".", n=2)[[1]][2])
 
 ext=tolower(stri_reverse(stri_split_fixed(stri_reverse(basename(file_path)),pattern = ".", n=2)[[1]][1]))
 
