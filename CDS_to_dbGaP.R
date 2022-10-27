@@ -90,11 +90,11 @@ path=paste(dirname(file_path),"/",sep = "")
 
 #Output file name based on input file name and date/time stamped.
 output_file=paste(file_name,
-                  "_dbGaP_",
+                  "_dbGaP",
                   stri_replace_all_fixed(
                     str = Sys.Date(),
                     pattern = "-",
-                    replacement = "_"),
+                    replacement = ""),
                   sep="")
                   
 
@@ -168,7 +168,7 @@ metadata_json=toJSON(metadata_json,pretty = F,auto_unbox = T)
 ################
 
 #Create an output directory for all the files
-new_dir=paste("dbGaP_submission_",stri_replace_all_fixed(str = Sys.Date(), pattern = "-",replacement = "_"),"/",sep = "")
+new_dir=paste("dbGaP_submission_",stri_replace_all_fixed(str = Sys.Date(), pattern = "-",replacement = ""),"/",sep = "")
 dir.create(path = paste(path,new_dir,sep = ""))
 
 path=paste(path,new_dir,sep = "")
@@ -187,3 +187,5 @@ write_tsv(x = SSM,file = paste(path,"SSM_DS_",output_file,".txt",sep = ""),na=""
 write_tsv(x = SA,file = paste(path,"SA_DS_",output_file,".txt",sep = ""),na="")
 
 write(x = metadata_json, file = paste(path,"metadata.json",sep = ""))
+
+cat(paste("\n\nProcess Complete.\n\nThe output files can be found here: ",path,"\n\n",sep = "")) 
