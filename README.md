@@ -10,7 +10,7 @@ Rscript --vanilla CDS_to_dbGaP.R --help
 ```
 Usage: CDS_to_dbGaP.R [options]
 
-CDS-CDS_to_dbGaP v.1.3.1
+CDS-CDS_to_dbGaP v2.0.0
 
 Options:
 	-f CHARACTER, --file=CHARACTER
