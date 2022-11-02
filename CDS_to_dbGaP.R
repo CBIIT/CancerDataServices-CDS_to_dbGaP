@@ -205,7 +205,7 @@ metadata_json=toJSON(metadata_json,pretty = F,auto_unbox = T)
 
 #Create new output directory
 new_dir=paste(phs_id,"_dbGaP_submission_",stri_replace_all_fixed(str = Sys.Date(), pattern = "-",replacement = ""),"/",sep = "")
-dir.create(path = paste(path,new_dir,sep = ""))
+dir.create(path = paste(path,new_dir,sep = ""), showWarnings = FALSE)
 
 path=paste(path,new_dir,sep = "")
 
