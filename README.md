@@ -1,7 +1,7 @@
 # CancerDataServices-CDS_to_dbGaP
-This R Script takes a validated submission template for CDS v1.3.1 as input. It will output a set of files, SubjectConsent data set (DS) and data dictionary (dd) and SubjectSampleMapping (SSM) files.
+This R Script takes a validated submission template for CDS as input. It will output a set of files, SubjectConsent data set (DS) and data dictionary (dd) and SubjectSampleMapping (SSM) files.
 
-To run the script on a complete [CDS v1.3.1 validated submission template](https://github.com/CBIIT/CancerDataServices-SubmissionValidationR), run the following command in a terminal where R is installed for help.
+To run the script on a complete [CDS validated submission template](https://github.com/CBIIT/cds-model/tree/main/metadata-manifest), run the following command in a terminal where R is installed for help.
 
 ```
 Rscript --vanilla CDS_to_dbGaP.R --help
