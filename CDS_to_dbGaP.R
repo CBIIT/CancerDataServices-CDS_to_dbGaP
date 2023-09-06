@@ -22,7 +22,7 @@
 ##################
 
 #List of needed packages
-list_of_packages=c("dplyr","readr","stringi","readxl","xlsx","optparse","jsonlite","tools")
+list_of_packages=c("dplyr","readr","stringi","readxl","openxlsx","optparse","jsonlite","tools")
 
 #Based on the packages that are present, install ones that are required.
 new.packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
@@ -31,8 +31,8 @@ suppressMessages(if(length(new.packages)) install.packages(new.packages, repos =
 #Load libraries.
 suppressMessages(library(dplyr,verbose = F))
 suppressMessages(library(readr,verbose = F))
-suppressMessages(library(xlsx,verbose = F))
 suppressMessages(library(readxl,verbose = F))
+suppressMessages(library(openxlsx,verbose = F))
 suppressMessages(library(optparse,verbose = F))
 suppressMessages(library(jsonlite,verbose = F))
 suppressMessages(library(tools,verbose = F))
@@ -210,11 +210,11 @@ dir.create(path = paste(path,new_dir,sep = ""), showWarnings = FALSE)
 path=paste(path,new_dir,sep = "")
 
 #Write out the three DD and three DS data frames
-write.xlsx(x = as.data.frame(df_sc_dd),file = paste(path,"SC_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
+write.xlsx(x = as.data.frame(df_sc_dd),file = paste(path,"SC_DD.xlsx",sep=""), colNames = FALSE, showNA = FALSE, rowNames = FALSE)
 
-write.xlsx(x = as.data.frame(df_ssm_dd),file = paste(path,"SSM_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
+write.xlsx(x = as.data.frame(df_ssm_dd),file = paste(path,"SSM_DD.xlsx",sep=""),colNames = FALSE, showNA = FALSE, rowNames = FALSE)
 
-write.xlsx(x = as.data.frame(df_sa_dd),file = paste(path,"SA_DD.xlsx",sep=""),col.names = FALSE, showNA = FALSE, row.names = FALSE)
+write.xlsx(x = as.data.frame(df_sa_dd),file = paste(path,"SA_DD.xlsx",sep=""),colNames = FALSE, showNA = FALSE, rowNames = FALSE)
 
 write_tsv(x = SC,file = paste(path,"SC_DS_",output_file,".txt",sep = ""),na="")
 
