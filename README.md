@@ -1,3 +1,8 @@
+> [!WARNING]
+> This repository has been archived and is no longer maintained.  
+> The code is provided for historical reference and may contain unpatched or unknown vulnerabilities.  
+> It should not be used in production systems.  
+
 # CancerDataServices-CDS_to_dbGaP
 This R Script takes a validated submission template for CDS as input. It will output a set of files, SubjectConsent data set (DS) and data dictionary (dd) and SubjectSampleMapping (SSM) files.
 
